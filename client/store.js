@@ -10,7 +10,8 @@ import socket from './socket';
 const initialState = {
   messages: [],
   name: 'Reggie',
-  newMessageEntry: ''
+  newMessageEntry: '',
+  channels: []
 };
 
 // ACTION TYPES
@@ -19,6 +20,7 @@ const UPDATE_NAME = 'UPDATE_NAME';
 const GET_MESSAGE = 'GET_MESSAGE';
 const GET_MESSAGES = 'GET_MESSAGES';
 const WRITE_MESSAGE = 'WRITE_MESSAGE';
+const GET_CHANNELS = 'GET_CHANNELS';
 
 // ACTION CREATORS
 
@@ -38,6 +40,10 @@ export const writeMessage = (content) => {
   return { type: WRITE_MESSAGE, content };
 }
 
+export const getChannels = (channels) => {
+  return { type: GET_CHANNELS, channels };
+};
+
 // THUNK CREATORS
 
 export const fetchMessages = () => {
@@ -56,6 +62,14 @@ export const postMessage = (message) => {
     const action = getMessage(newMessage);
     dispatch(action);
     socket.emit('new-message', newMessage);
+  }
+}
+
+export const fetchChannels = () => {
+  return async (dispatch) => {
+    const {data} = await axios.get('/api/channels');
+    const action = getChannels(data);
+    dispatch(action);
   }
 }
 
@@ -109,6 +123,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         newMessageEntry: action.content
+      };
+
+    case GET_CHANNELS:
+      return {
+        ...state,
+        channels: action.channels
       };
 
     default:

@@ -3,18 +3,17 @@ import { connect } from 'react-redux';
 import { postMessage, writeMessage } from '../store';
 
 class NewMessageEntry extends Component {
-
-  constructor () {
+  constructor() {
     super();
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange (evt) {
+  handleChange(evt) {
     this.props.writeMessage(evt.target.value);
   }
 
-  handleSubmit (evt) {
+  handleSubmit(evt) {
     evt.preventDefault();
 
     const { name, newMessageEntry } = this.props;
@@ -25,7 +24,7 @@ class NewMessageEntry extends Component {
     this.props.writeMessage('');
   }
 
-  render () {
+  render() {
     return (
       <form id="new-message-form" onSubmit={this.handleSubmit}>
         <div className="input-group input-group-lg">
@@ -38,7 +37,9 @@ class NewMessageEntry extends Component {
             placeholder="Say something nice..."
           />
           <span className="input-group-btn">
-            <button className="btn btn-default" type="submit">Chat!</button>
+            <button className="btn btn-default" type="submit">
+              Chat!
+            </button>
           </span>
         </div>
       </form>
@@ -46,18 +47,21 @@ class NewMessageEntry extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
-    name: state.name, 
-    newMessageEntry: state.newMessageEntry 
-  }
-}
+    name: state.name,
+    newMessageEntry: state.newMessageEntry,
+  };
+};
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
   return {
-    postMessage: (message) => dispatch(postMessage(message)),
-    writeMessage: (string) => dispatch(writeMessage(string))
-  }
-}
+    postMessage: message => dispatch(postMessage(message)),
+    writeMessage: string => dispatch(writeMessage(string)),
+  };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewMessageEntry);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NewMessageEntry);
