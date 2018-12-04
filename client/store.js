@@ -41,9 +41,9 @@ const fetchMessages = () => {
   };
 };
 
-export const gotNewMessage = () => {
+export const gotNewMessage = (messageObj) => {
   return async dispatch => {
-    const { data } = await axios.post('/api/messages');
+    const { data } = await axios.post('/api/messages', messageObj);
     dispatch(getMessage(data));
   };
 };
@@ -56,7 +56,7 @@ const reducer = (state = initialState, action) => {
     case WRITE_MESSAGE:
       return { ...state, newMessage: action.newMessage };
     case GET_NEW_MESSAGE:
-      return { ...state, messages: [...state.messages, action.message] };
+      return { ...state, messages: [...state.messages, action.message], newMessage: '' };
     default:
       return state;
   }

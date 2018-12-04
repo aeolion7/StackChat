@@ -24,7 +24,7 @@ class MessagesList extends Component {
             <Message message={message} key={message.id} />
           ))}
         </ul>
-        <NewMessageEntry />
+        <NewMessageEntry channelId={channelId} />
       </div>
     );
   }
