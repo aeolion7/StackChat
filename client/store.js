@@ -2,14 +2,20 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import loggerMiddleware from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import axios from 'axios';
+import socket from "./socket"
 
 //initial state
-const initialState = { messages: [], newMessage: '' };
+const initialState = { 
+  messages: [], 
+  newMessage: '',
+  name: ''
+ };
 
 // action consts
 const GOT_MESSAGES_FROM_SERVER = 'GOT_MESSAGES_FROM_SERVER';
 const WRITE_MESSAGE = 'WRITE_MESSAGE';
 const GET_NEW_MESSAGE = 'GET_NEW_MESSAGE';
+const CHANGE_NAME = 'CHANGE_NAME'
 
 // action creators
 const gotMessagesFromServer = messages => {
@@ -33,6 +39,13 @@ const getMessage = message => {
   };
 };
 
+const changeName = (name) => {
+  return {
+    type: CHANGE_NAME,
+    name
+  }
+}
+
 //async action creators
 const fetchMessages = () => {
   return async dispatch => {
@@ -45,6 +58,7 @@ export const gotNewMessage = (messageObj) => {
   return async dispatch => {
     const { data } = await axios.post('/api/messages', messageObj);
     dispatch(getMessage(data));
+    socket.emit('new-message', data)
   };
 };
 
@@ -57,6 +71,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, newMessage: action.newMessage };
     case GET_NEW_MESSAGE:
       return { ...state, messages: [...state.messages, action.message], newMessage: '' };
+    case CHANGE_NAME:
+      return {...state, name: action.name}
     default:
       return state;
   }
@@ -68,4 +84,4 @@ const store = createStore(
 );
 
 export default store;
-export { gotMessagesFromServer, fetchMessages };
+export { gotMessagesFromServer, fetchMessages, getMessage, changeName };

@@ -17,10 +17,12 @@ class NewMessageEntry extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    console.log("do I have name from the props?", this.props, this.props.name)
+    const name = this.props.name
     const content = this.props.newMessageEntry;
     const channelId = this.props.channelId;
 
-    this.props.post({ content, channelId });
+    this.props.post({ content, name, channelId });
   }
 
   render() {
@@ -51,6 +53,7 @@ class NewMessageEntry extends Component {
 const mapStateToProps = state => {
   return {
     newMessageEntry: state.newMessage,
+    name: state.name
   };
 };
 
