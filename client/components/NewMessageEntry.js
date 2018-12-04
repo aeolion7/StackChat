@@ -3,7 +3,6 @@ import { writeMessage, gotNewMessage } from '../store';
 import { connect } from 'react-redux';
 
 class NewMessageEntry extends Component {
-
   constructor() {
     super();
     this.handleChange = this.handleChange.bind(this);
@@ -17,8 +16,8 @@ class NewMessageEntry extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log("do I have name from the props?", this.props, this.props.name)
-    const name = this.props.name
+
+    const name = this.props.name;
     const content = this.props.newMessageEntry;
     const channelId = this.props.channelId;
 
@@ -34,7 +33,7 @@ class NewMessageEntry extends Component {
             type="text"
             name="content"
             placeholder="Say something nice..."
-            onChange={(event) => {
+            onChange={event => {
               this.handleChange(event.target.value);
             }}
             value={this.props.newMessageEntry}
@@ -53,7 +52,7 @@ class NewMessageEntry extends Component {
 const mapStateToProps = state => {
   return {
     newMessageEntry: state.newMessage,
-    name: state.name
+    name: state.name,
   };
 };
 
@@ -64,10 +63,13 @@ const mapDispatchToProps = dispatch => {
     },
     post: messageObj => {
       dispatch(gotNewMessage(messageObj));
-    }
+    },
   };
 };
 
-const ConnectedNewMessageEntry = connect(mapStateToProps, mapDispatchToProps)(NewMessageEntry);
+const ConnectedNewMessageEntry = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NewMessageEntry);
 
 export default ConnectedNewMessageEntry;
